@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+          crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/zebra_dialog@1.4.0/dist/zebra_dialog.min.js"></script>
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/zebra_dialog@latest/dist/css/flat/zebra_dialog.min.css">
+    <script src="../js/home.js"></script>
+    <title>Data Kendaraan</title>
+</head>
+<body>
+    <div class="container-fluid p-sm-2 p-md-4">
+        <div>
+            <a href="/" class="text-decoration-none row" style="color: #74C0FC;">
+                <i class="col-auto fa fa-solid fa-folder fa-2x fs--1"></i>
+                <h3 class="col-auto" style="color: black">Aplikasi Data Kendaraan</h3>
+            </a>
+        </div>
+
+        <div class="card my-1 mx-sm-2 mx-md-3 bg-info">
+            <div class="card-body">
+                <div class="mb-3 mx-3">
+                    <label for="no-registration" class="row form-label fw-bold my-0">No Registrasi</label>
+                    <input type="text" class="row" id="no-registration" name="no-registration" value="">
+                </div>
+                <div class="mb-3 mx-3">
+                    <label for="username" class="row form-label fw-bold my-0">Nama Pemilik</label>
+                    <input type="text" class="row" id="username" name="username" value="">
+                </div>
+            </div>
+        </div>
+
+        <div class="float-end mx-sm-2 mx-md-3 mb-1">
+            <button type="button" id="search" class="btn btn-primary py-2 px-5">Search</button>
+            <button type="button" id="add" class="btn btn-primary py-2 px-5 ms-2">Add</button>
+        </div>
+
+        <div >
+            <table class="text-center" style="border-collapse: collapse;width: 100%">
+                <thead>
+                <tr>
+                    <th class="border-1 border-black bg-info">No</th>
+                    <th class="border-1 border-black bg-info">No Registrasi</th>
+                    <th class="border-1 border-black bg-info">Nama Pemilik</th>
+                    <th class="border-1 border-black bg-info">Merk Kendaraan</th>
+                    <th class="border-1 border-black bg-info">Tahun Pembuatan</th>
+                    <th class="border-1 border-black bg-info">Kapasitas</th>
+                    <th class="border-1 border-black bg-info">Warna</th>
+                    <th class="border-1 border-black bg-info">Bahan Bakar</th>
+                    <th class="border-1 border-black bg-info">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+    <script>
+        $(document).ready(function () {
+
+
+            $.getJSON("http://localhost:8080/api/vehicle/", function (json) {
+                const tr = []
+                for( let i=0; i< json.length; i++) {
+                    tr.push("<tr>")
+                    tr.push(`<td class="border-1 border-black m-0">${i+1}</td>`)
+                    tr.push(`<td class="border-1 border-black m-0">${json[i].id}</td>`)
+                    tr.push(`<td class="border-1 border-black m-0">${json[i].name}</td>`)
+                    tr.push(`<td class="border-1 border-black m-0">${json[i].brand}</td>`)
+                    tr.push(`<td class="border-1 border-black m-0">` + (json[i].year_created > 1 ? json[i].year_created : "") + `</td>`)
+                    tr.push(`<td class="border-1 border-black m-0">` + (json[i].capacity > 1 ? json[i].capacity + " cc" : "") + `</td>`)
+                    tr.push(`<td class="border-1 border-black m-0">` + (json[i].color != null ? json[i].color : "") + `</td>`)
+                    tr.push(`<td class="border-1 border-black m-0">${json[i].fuel}</td>`)
+                    tr.push(`<td class="border-1 border-black m-0">`)
+                    tr.push(`<div class="d-flex flex-row flex-nowrap justify-content-evenly m-0 pt-1 align-items-center">`)
+                    tr.push(`<a href="/detail/${json[i].id}"  class="text-danger text-decoration-none" >Detail</a>`)
+                    tr.push(`<a href="/edit/${json[i].id}" class="text-primary text-decoration-none" >Edit </a>`)
+                    tr.push(`<a href="#" onclick="handleDelete('${json[i].id}')"  class="text-danger text-decoration-none" >Delete</a>`)
+                    tr.push(`</div>`)
+                    tr.push(`</td>`)
+                    tr.push("<tr>")
+                }
+                $("tbody").append($(tr.join('')))
+            })
+
+
+            $("#add").on("click", function () {
+                window.location.href = "/add"
+            })
+
+            $("#search").on("click", function (e) {
+                e.preventDefault()
+                $("tbody").empty()
+                let no = $("#no-registration").val()
+                let name = $("#username").val()
+                $.getJSON(`http://localhost:8080/api/vehicle/search?no=${no}&name=${name}`, function (json) {
+                    const tr = []
+
+                    for( let i=0; i< json.length; i++) {
+                        console.log(json[i].color)
+                        const record = `
+                                <tr>
+                                <td class="border-1 border-black m-0">${i+1}</td>
+                                <td class="border-1 border-black m-0">${json[i].id}</td>
+                                <td class="border-1 border-black m-0">${json[i].name}</td>
+                                <td class="border-1 border-black m-0">${json[i].brand}</td>
+                                <td class="border-1 border-black m-0">` + (json[i].year_created > 1 ? json[i].year_created : "") + `</td>
+                                <td class="border-1 border-black m-0">` + (json[i].capacity > 1 ? json[i].capacity + " cc" : "") + `</td>
+                                <td class="border-1 border-black m-0">` + (json[i].color != null ? json[i].color : "") + `</td>
+                                <td class="border-1 border-black m-0">${json[i].fuel}</td>
+                                <td class="border-1 border-black m-0">
+                                    <div class="d-flex flex-row flex-nowrap justify-content-evenly m-0 pt-1 align-items-center">
+                                        <a href="/detail/${json[i].id}"  class="text-danger text-decoration-none" >Detail</a>
+                                        <a href="/edit/${json[i].id}" class="text-primary text-decoration-none" >Edit </a>
+                                        <a href="#" onclick="handleDelete('${json[i].id}')"  class="text-danger text-decoration-none" >Delete</a>
+                                    </div>
+                                </td>
+                                <tr>
+                                    `
+
+                        tr.push(record)
+                    }
+                    $("tbody").append($(tr.join('')))
+                })
+            })
+        })
+
+        function handleDelete(id) {
+            new $.Zebra_Dialog(
+                `Anda yakin menghapus data ${id}?`,
+                {
+                    buttons: ["Batal", "OK"],
+                    onClose: function (caption) {
+                        if(caption === "OK") {
+                            $.ajax({
+                                type: "DELETE",
+                                contentType: "application/json",
+                                url: `/api/vehicle/${id}`,
+                            })
+                            window.location.reload()
+                        } else {
+
+                        }
+                    }
+                }
+            );
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>
