@@ -50,6 +50,8 @@
             return pathSegment[pathSegment.length - 1]
         }
 
+
+
         $.ajax({
             type: "GET",
             contentType: "application/json",
@@ -58,37 +60,37 @@
                 $("#form").append(`<div>
                     <div class="mb-3 mx-3">
                         <label class="row form-label fw-bold my-0">No. Registrasi Kendaraan</label>
-                        <p type="text" class="row me-5" style="width: 350px">${json.id}</p>
+                        <p class="row me-5"  >${json.id}</p>
                     </div>
                     <div class="mb-3 mx-3">
                         <label class="row form-label fw-bold my-0">Nama Pemilik</label>
-                        <p type="text" class="row me-5" style="width: 350px">${json.name}</p>
+                        <p class="row me-5"  >${json.name}</p>
                     </div>
                     <div class="mb-3 mx-3">
                         <label class="row form-label fw-bold my-0">Merek Kendaraan</label>
-                        <p type="text" class="row me-5" style="width: 350px">` + (json.brand.length > 0 ? json.brand : "-") + `</p>
+                        <p class="row me-5"  >` + (json.brand.length > 0 ? json.brand : "-") + `</p>
                     </div>
                     <div class="mb-3 mx-3">
                         <label class="row form-label fw-bold my-0">Alamat Pemilik Kendaraan</label>
-                        <p type="text" class="row me-5" style="width: 350px">` + (json.address.length > 0 ? json.address : "-") + `</p>
+                        <p class="row me-5"  >` + (json.address.length > 0 ? json.address : "-") + `</p>
                     </div>
                 </div>
                 <div>
                     <div class="mb-3 mx-3">
                         <label class="row form-label fw-bold my-0">Tahun Pembuatan</label>
-                        <p type="text" class="row me-5" style="width: 350px">` + (json.year_created > 0 ? json.year_created : "-") + `</p>
+                        <p class="row me-5"  >` + (json.year_created > 0 ? json.year_created : "-") + `</p>
                     </div>
                     <div class="mb-3 mx-3">
                         <label class="row form-label fw-bold my-0">Kapasitas Silinder</label>
-                        <p type="text" class="row me-5" style="width: 350px">` + (json.capacity > 0 ? json.capacity + " cc" : "-") + `</p>
+                        <p class="row me-5"  >` + (json.capacity > 0 ? json.capacity + " cc" : "-") + `</p>
                     </div>
                     <div class="mb-3 mx-3">
                         <label for="color" class="row form-label fw-bold my-0">Warna Kendaraan</label>
-                        <p type="text" class="row me-5" style="width: 350px">` + (json.color != null ? json.color : "-") + `</p>
+                        <p class="row me-5"  >` + (json.color != null ? json.color : "-") + `</p>
                     </div>
                     <div class="mb-3 mx-3">
                         <label for="fuel" class="row form-label fw-bold my-0">Bahan Bakar</label>
-                        <p type="text" class="row me-5" style="width: 350px">` + (json.fuel.length > 0 ? json.fuel : "-") + `</p>
+                        <p class="row me-5"  >` + (json.fuel.length > 0 ? json.fuel : "-") + `</p>
                     </div>
                 </div>`)
             },

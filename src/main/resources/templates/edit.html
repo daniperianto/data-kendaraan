@@ -18,6 +18,42 @@
     <link
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/zebra_dialog@latest/dist/css/flat/zebra_dialog.min.css">
+    <style>
+        @media only screen and (max-width: 325px) {
+            input {
+                width: 200px;
+            }
+            textarea {
+                width: 200px;
+            }
+            select {
+                width: 200px;
+            }
+        }
+        @media only screen and (min-width: 325px) {
+            input {
+                width: 250px;
+            }
+            textarea {
+                width: 250px;
+            }
+            select {
+                width: 250px;
+            }
+        }
+        @media only screen and (min-width: 430px) {
+            input {
+                width: 350px;
+            }
+            textarea {
+                width: 350px;
+            }
+            select {
+                width: 350px;
+            }
+        }
+
+    </style>
     <title>Edit Data Kendaraan</title>
 </head>
 <body>
@@ -39,7 +75,7 @@
         </div>
 
         <div class="float-end mx-sm-2 mx-md-3 mb-3">
-            <button type="submit" id="simpan" class="btn btn-primary py-2 px-5">Simpan</button>
+            <button type="submit" id="simpan" class="btn btn-primary py-2 px-5 ms-2">Simpan</button>
             <button type="button" id="kembali" class="btn btn-secondary py-2 px-5 ms-2">Kembali</button>
         </div>
     </div>
@@ -62,33 +98,33 @@
                 $("#form").append(`<div>
                     <div class="mb-3 mx-3">
                         <label for="no" class="row form-label fw-bold my-0">No. Registrasi Kendaraan</label>
-                        <input type="text" class="row me-5" id="no" name="no" value="${json.id}" style="width: 350px">
+                        <input type="text" class="row me-5" id="no" name="no" value="${json.id}"  >
                     </div>
                     <div class="mb-3 mx-3">
                         <label for="name" class="row form-label fw-bold my-0">Nama Pemilik</label>
-                        <input type="text" class="row me-5" id="name" name="name" value="${json.name}" style="width: 350px">
+                        <input type="text" class="row me-5" id="name" name="name" value="${json.name}"  >
                     </div>
                     <div class="mb-3 mx-3">
                         <label for="brand" class="row form-label fw-bold my-0">Merek Kendaraan</label>
-                        <input type="text" class="row me-5" id="brand" name="brand" value="${json.brand}" style="width: 350px">
+                        <input type="text" class="row me-5" id="brand" name="brand" value="${json.brand}"  >
                     </div>
                     <div class="mb-3 mx-3">
                         <label for="address" class="row form-label fw-bold my-0">Alamat Pemilik Kendaraan</label>
-                        <textarea class="row me-5" id="address" name="address" rows="3" style="resize: none;width: 350px">${json.address}</textarea>
+                        <textarea class="row me-5" id="address" name="address" rows="3" style="resize: none">${json.address}</textarea>
                     </div>
                 </div>
                 <div>
                     <div class="mb-3 mx-3">
                         <label for="year" class="row form-label fw-bold my-0">Tahun Pembuatan</label>
-                        <input type="text" maxlength="4" class="row me-5" id="year" name="year" value="${json.year_created}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*?)\\..*/g, '$1');" style="width: 350px"/>
+                        <input type="text" maxlength="4" class="row me-5" id="year" name="year" value="${json.year_created}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*?)\\..*/g, '$1');"  />
                     </div>
                     <div class="mb-3 mx-3">
                         <label for="capacity" class="row form-label fw-bold my-0">Kapasitas Silinder</label>
-                        <input type="text" maxlength="4" class="row me-5" id="capacity" name="capacity" value="${json.capacity}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*?)\\..*/g, '$1');" style="width: 350px"/>
+                        <input type="text" maxlength="4" class="row me-5" id="capacity" name="capacity" value="${json.capacity}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*?)\\..*/g, '$1');"  />
                     </div>
                     <div class="mb-3 mx-3">
                         <label for="color" class="row form-label fw-bold my-0">Warna Kendaraan</label>
-                        <select style="width: 350px;margin-left: -12px;padding: 3px"  name="color" id="color">
+                        <select style="margin-left: -12px;padding: 3px"  name="color" id="color">
                             ` + (json.color == null ? `<option value="" disabled selected hidden>Pilih Warna</option>`: "") + `
                             <option value="Merah"` + (json.color === "Merah" ? "selected" : "") + `>Merah</option>
                             <option value="Hitam"` + (json.color === "Hitam" ? "selected" : "") + `>Hitam</option>
@@ -98,7 +134,7 @@
                     </div>
                     <div class="mb-3 mx-3">
                         <label for="fuel" class="row form-label fw-bold my-0">Bahan Bakar</label>
-                        <input type="text" class="row me-5" id="fuel" name="fuel" value="${json.fuel}"  style="width: 350px"/>
+                        <input type="text" class="row me-5" id="fuel" name="fuel" value="${json.fuel}"   />
                     </div>
                 </div>`)
             },
