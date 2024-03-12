@@ -41,7 +41,12 @@ public class VehicleController {
 
     @PostMapping("/add")
     public ResponseEntity<?> add(@Valid @RequestBody Vehicle vehicle) {
-        return ResponseEntity.ok(service.save(vehicle));
+        Optional<Vehicle> vehicle1 = service.findById(vehicle.getId());
+        if(vehicle1.isPresent()) {
+            return ResponseEntity.badRequest().body("Id already exist!");
+        } else {
+            return ResponseEntity.ok(service.save(vehicle));
+        }
     }
 
     @PutMapping("/edit")

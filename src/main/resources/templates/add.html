@@ -74,10 +74,12 @@
                 <div class="mb-3 mx-3">
                     <label for="no" class="row form-label fw-bold my-0">No. Registrasi Kendaraan</label>
                     <input type="text" class="row me-5" id="no" name="no" value="" required>
+                    <p id="error-id" style="color: red;display: none">This field is required</p>
                 </div>
                 <div class="mb-3 mx-3">
                     <label for="name" class="row form-label fw-bold my-0">Nama Pemilik</label>
                     <input type="text" class="row me-5" id="name" name="name" value=""   required>
+                    <p id="error-name" style="color: red;display: none">This field is required</p>
                 </div>
                 <div class="mb-3 mx-3">
                     <label for="brand" class="row form-label fw-bold my-0">Merek Kendaraan</label>
@@ -124,16 +126,12 @@
 
 
 <script>
-    function resposiveInput() {
-
-    }
-
-
     $(document).ready(function () {
 
         $("#simpan").on("click", function (e) {
             e.preventDefault();
             let vehicle = {}
+
             vehicle["id"] = $("#no").val()
             vehicle["name"] = $("#name").val()
             vehicle["address"] = $("#address").val()
@@ -143,35 +141,75 @@
             vehicle["color"] = $("#color").val()
             vehicle["fuel"] = $("#fuel").val()
 
-            $.ajax({
-                type: "POST",
-                contentType: "application/json",
-                url: "/api/vehicle/add",
-                data: JSON.stringify(vehicle),
-                dataType: 'json',
-                success: function () {
+            if(vehicle["id"] === "") {
+                document.getElementById("error-id").style.display = "inline"
+                new $.Zebra_Dialog(
+                    `No Kendaraan harus di isi!`,
+                    {
+                        buttons: ["OK"],
+                    }
+                );
+            } else {
+                document.getElementById("error-id").style.display = "none"
+            }
+
+            if (vehicle["name"] === "") {
+                document.getElementById("error-name").style.display = "inline"
+                if(vehicle["id"] !== "") {
                     new $.Zebra_Dialog(
-                        `Sukses menambah data kendaraan!`,
-                        {
-                            buttons: ["OK"],
-                            onClose: function (caption) {
-                                if (caption === "OK") {
-                                    window.location.reload()
-                                }
-                            }
-                        }
-                    );
-                },
-                error: function (e) {
-                    console.log(e)
-                    new $.Zebra_Dialog(
-                        `Gagal menambah data kendaraan!`,
+                        `Nama pemilik harus di isi!`,
                         {
                             buttons: ["OK"],
                         }
                     );
                 }
-            })
+            } else {
+                document.getElementById("error-name").style.display = "none"
+            }
+
+            if (vehicle["id"] !== "" && vehicle["name"] !== "") {
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json",
+                    url: "/api/vehicle/add",
+                    data: JSON.stringify(vehicle),
+                    dataType: 'json',
+                    success: function () {
+                        new $.Zebra_Dialog(
+                            `Sukses menambah data kendaraan!`,
+                            {
+                                buttons: ["OK"],
+                                onClose: function (caption) {
+                                    if (caption === "OK") {
+                                        window.location.reload()
+                                    }
+                                }
+                            }
+                        );
+                    },
+                    error: function (xhr) {
+                        let res = xhr.responseText
+                        if(res === "Id already exist!") {
+                            new $.Zebra_Dialog(
+                                `No Kendaraan sudah terdaftar!`,
+                                {
+                                    buttons: ["OK"],
+                                }
+                            );
+                        } else {
+                            new $.Zebra_Dialog(
+                                `Gagal menambah kendaraan!`,
+                                {
+                                    buttons: ["OK"],
+                                }
+                            );
+                        }
+
+                    }
+                })
+            }
+
+
         })
 
         $("#kembali").on("click", function () {

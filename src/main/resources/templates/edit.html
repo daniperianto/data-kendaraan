@@ -98,11 +98,12 @@
                 $("#form").append(`<div>
                     <div class="mb-3 mx-3">
                         <label for="no" class="row form-label fw-bold my-0">No. Registrasi Kendaraan</label>
-                        <input type="text" class="row me-5" id="no" name="no" value="${json.id}"  >
+                        <input type="text" class="row me-5" id="no" name="no" value="${json.id}" disabled >
                     </div>
                     <div class="mb-3 mx-3">
                         <label for="name" class="row form-label fw-bold my-0">Nama Pemilik</label>
                         <input type="text" class="row me-5" id="name" name="name" value="${json.name}"  >
+                        <p id="error-name" style="color: red;display: none">This field is required</p>
                     </div>
                     <div class="mb-3 mx-3">
                         <label for="brand" class="row form-label fw-bold my-0">Merek Kendaraan</label>
@@ -155,35 +156,48 @@
             vehicle["color"] = $("#color").val()
             vehicle["fuel"] = $("#fuel").val()
 
-            $.ajax({
-                type: "PUT",
-                contentType: "application/json",
-                url: "/api/vehicle/edit",
-                data: JSON.stringify(vehicle),
-                dataType: 'json',
-                success: function () {
+            if (vehicle["name"] === "") {
+                document.getElementById("error-name").style.display = "inline"
+                if(vehicle["id"] !== "") {
                     new $.Zebra_Dialog(
-                        `Sukses mengedit data kendaraan!`,
-                        {
-                            buttons: ["OK"],
-                            onClose: function (caption) {
-                                if (caption === "OK") {
-                                    window.location.href = `/detail/${vehicle["id"]}`
-                                }
-                            }
-                        }
-                    );
-                },
-                error: function (e) {
-                    console.log(e)
-                    new $.Zebra_Dialog(
-                        `Gagal mengedit data kendaraan!`,
+                        `Nama pemilik harus di isi!`,
                         {
                             buttons: ["OK"],
                         }
                     );
                 }
-            })
+            } else {
+                document.getElementById("error-name").style.display = "none"
+                $.ajax({
+                    type: "PUT",
+                    contentType: "application/json",
+                    url: "/api/vehicle/edit",
+                    data: JSON.stringify(vehicle),
+                    dataType: 'json',
+                    success: function () {
+                        new $.Zebra_Dialog(
+                            `Sukses mengedit data kendaraan!`,
+                            {
+                                buttons: ["OK"],
+                                onClose: function (caption) {
+                                    if (caption === "OK") {
+                                        window.location.href = `/detail/${vehicle["id"]}`
+                                    }
+                                }
+                            }
+                        );
+                    },
+                    error: function (e) {
+                        console.log(e)
+                        new $.Zebra_Dialog(
+                            `Gagal mengedit data kendaraan!`,
+                            {
+                                buttons: ["OK"],
+                            }
+                        );
+                    }
+                })
+            }
         })
 
         $("#kembali").on("click", function () {
